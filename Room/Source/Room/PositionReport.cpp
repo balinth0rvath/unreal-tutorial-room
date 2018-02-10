@@ -18,8 +18,8 @@ UPositionReport::UPositionReport()
 void UPositionReport::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
+    FString name = GetOwner()->GetName();
+    UE_LOG(LogTemp, Warning, TEXT("PositionReport reporting: %s"), *name);
 	
 }
 
@@ -29,6 +29,5 @@ void UPositionReport::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 

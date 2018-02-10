@@ -10,5 +10,9 @@ public class RoomEditorTarget : TargetRules
 		Type = TargetType.Editor;
 
 		ExtraModuleNames.AddRange( new string[] { "Room" } );
+        
+        // 4.16 or earlier
+        //bUseUnityBuild = false;
+        //bUsePCHFiles = false;
 	}
 }
