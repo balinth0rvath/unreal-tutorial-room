@@ -17,13 +17,7 @@ UOpenDoor2::UOpenDoor2()
 
 void UOpenDoor2::OpenDoor(float yaw)
 {
-    AActor* Owner = GetOwner();
-    
-    FRotator rotation = Owner->GetActorRotation();
-    FRotator newRotation(0.f,yaw,0.f);
-    //UE_LOG(LogTemp, Error, TEXT("Old rotation_is: %s"), *rotation.ToString());
-    Owner->SetActorRotation(newRotation, ETeleportType::None);
-    
+    Owner->SetActorRotation(FRotator(0.f,yaw,0.f));
 }
 
 // Called when the game starts
@@ -31,7 +25,7 @@ void UOpenDoor2::BeginPlay()
 {
 	Super::BeginPlay();
     this->actorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
-    
+    this->Owner = GetOwner();
 	
 }
 
@@ -42,8 +36,21 @@ void UOpenDoor2::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
     if (pressurePlate->IsOverlappingActor(actorThatOpens)) {
-        UE_LOG(LogTemp, Error, TEXT("OPEN IT"));
-        OpenDoor(53);
+        if (LastDoorOpenTime==0)
+            UE_LOG(LogTemp, Error, TEXT("OPEN IT"));
+        OpenDoor(openAngle);
+        LastDoorOpenTime =  GetWorld()->GetTimeSeconds();
+        UE_LOG(LogTemp, Error, TEXT("KEEP OPEN IT"));
     }
+    
+    float currentTime = GetWorld()->GetTimeSeconds();
+    if ((currentTime - LastDoorOpenTime > DoorCloseDelay) && (LastDoorOpenTime!=0))
+    {
+        UE_LOG(LogTemp, Error, TEXT("CLOSE IT"));
+        OpenDoor(-90.f);
+        LastDoorOpenTime = 0;
+    }
+    
+    // Check if it is time to close the door;
 }
 
