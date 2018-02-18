@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "DrawDebugHelpers.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "Runtime/Engine/Classes/Components/InputComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -26,9 +28,18 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+    void Grab();
+    void Release();
+    FHitResult getFirstPhysicsBodyInReach();
     APlayerController* PlayerController;
     
     UPROPERTY(EditAnywhere)
     float Len = 100.0f;
+    
+    UPhysicsHandleComponent* handle = nullptr;
+    
+    UInputComponent* input = nullptr;
+    
+    void FindComponents();
 	
 };
