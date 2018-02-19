@@ -10,6 +10,11 @@
 #include "Grabber.generated.h"
 
 
+struct ULineTrace {
+    FVector Start;
+    FVector End;
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ROOM_API UGrabber : public UActorComponent
 {
@@ -30,8 +35,8 @@ public:
 private:
     void Grab();
     void Release();
+    void GetTrace(ULineTrace &);
     FHitResult getFirstPhysicsBodyInReach();
-    APlayerController* PlayerController;
     
     UPROPERTY(EditAnywhere)
     float Len = 100.0f;
