@@ -42,12 +42,19 @@ void UGrabber::FindComponents()
 void UGrabber::Grab()
 {
     UE_LOG(LogTemp, Warning, TEXT("Grab"));
-    getFirstPhysicsBodyInReach();
+    FHitResult result = getFirstPhysicsBodyInReach();
+    auto ComponentToGrab = result.GetComponent();
+    auto ActorHit = result.GetActor();
+    if (ActorHit)
+    {
+        handle->GrabComponent(ComponentToGrab,NAME_None,ComponentToGrab->GetOwner()->GetActorLocation(),true);
+    }
 }
 
 void UGrabber::Release()
 {
     UE_LOG(LogTemp, Warning, TEXT("Release"));
+    handle->ReleaseComponent();
 }
 
 FHitResult UGrabber::getFirstPhysicsBodyInReach()
@@ -89,5 +96,15 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     
+    if (handle->GrabbedComponent)
+    {
+        FVector vector;
+        FRotator rotator;
+        this->PlayerController->GetPlayerViewPoint(vector, rotator);
+        FVector ev = rotator.Vector();
+        FVector lineTraceEnd =vector + (this->Len) * ev;
+        
+        handle->SetTargetLocation(lineTraceEnd);
+    }
 }
 
