@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/TriggerVolume.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "OpenDoor2.generated.h"
 
 
@@ -28,6 +29,8 @@ public:
 
 private:
     void OpenDoor(float yaw);
+    float GetTotalMassOfActorsOnPlate();
+    
     UPROPERTY(EditAnywhere)
     float openAngle = -15.3f;
     
@@ -37,9 +40,7 @@ private:
     UPROPERTY(EditAnywhere)
     float DoorCloseDelay = 0.53f;
     float LastDoorOpenTime;
-    
-    
-    AActor* actorThatOpens;
+
     AActor* Owner;
 	
 };
