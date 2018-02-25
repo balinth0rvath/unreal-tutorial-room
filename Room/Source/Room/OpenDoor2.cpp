@@ -27,6 +27,12 @@ void UOpenDoor2::BeginPlay()
 	Super::BeginPlay();
     
     this->Owner = GetOwner();
+    
+    if (!pressurePlate)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Missing pressure plate: %s"), *GetOwner()->GetName());
+        return;
+    }
 	
 }
 
@@ -36,6 +42,8 @@ void UOpenDoor2::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+    if (!pressurePlate)
+        return;
     if (GetTotalMassOfActorsOnPlate()>15.f) {
         if (LastDoorOpenTime==0)
             OpenDoor(openAngle);
