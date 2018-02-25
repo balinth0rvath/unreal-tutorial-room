@@ -16,10 +16,6 @@ UOpenDoor2::UOpenDoor2()
 
 
 
-void UOpenDoor2::OpenDoor(float yaw)
-{
-    Owner->SetActorRotation(FRotator(0.f,yaw,0.f));
-}
 
 // Called when the game starts
 void UOpenDoor2::BeginPlay()
@@ -44,20 +40,14 @@ void UOpenDoor2::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 
     if (!pressurePlate)
         return;
-    if (GetTotalMassOfActorsOnPlate()>15.f) {
-        if (LastDoorOpenTime==0)
-            OpenDoor(openAngle);
-        LastDoorOpenTime =  GetWorld()->GetTimeSeconds();
-    }
-    
-    float currentTime = GetWorld()->GetTimeSeconds();
-    if ((currentTime - LastDoorOpenTime > DoorCloseDelay) && (LastDoorOpenTime!=0))
+    if (GetTotalMassOfActorsOnPlate()>TriggerMass)
     {
-        OpenDoor(-90.f);
-        LastDoorOpenTime = 0;
+        OnOpen.Broadcast();
     }
-    
-    // Check if it is time to close the door;
+    else
+    {
+        OnClose.Broadcast();
+    }
 }
 
 float UOpenDoor2::GetTotalMassOfActorsOnPlate()
